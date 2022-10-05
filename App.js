@@ -1,20 +1,58 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+import * as Contacts from 'expo-contacts';
+import React, { useState } from 'react';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+  const [contact, setContact] = useState({});
+  
+  const getContacts = async () => {
+
+    const { status } = await Contacts.requestPermissionsAsync();
+    if (status === 'granted') {
+      const { data } = await Contacts.getContactsAsync(
+        { fields: [Contacts.Fields.PhoneNumbers] }
+      );
+    if (data.length > 0) {
+      setContact(data);
+      console.log(data);
+    }
+    }}
+
+return (
+
+  <View style={styles.container}>
+  <FlatList 
+  data={contact}renderItem={({item}) =><Text>{item.name}</Text>}
+  keyExtractor={(item, index) => index.toString()}
+  />
+  <View style={styles.buttoncontainer}>
+  <Button title="Get Contacts"onPress={getContacts} />
+  </View>
+  </View>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop: 40, 
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  phonelist: {
+    marginTop: 10,   
+    alignItems: 'center',
+    justifyContent: 'center', 
+  },
+
+  buttoncontainer : {
+    marginTop: 5,
+    marginBottom: 5,
+    alignItems: 'center'
+    
   },
 });
