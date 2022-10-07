@@ -24,8 +24,9 @@ return (
 
   <View style={styles.container}>
   <FlatList 
-  data={contact}renderItem={({item}) =><Text>{item.name}</Text>}
-  keyExtractor={(item, index) => index.toString()}
+  data={contact}
+  renderItem={({item}) =><Text>{item.name}   ({item.phoneNumbers[0].number})</Text>}
+  keyExtractor={(item) => item.lookupKey}
   />
   <View style={styles.buttoncontainer}>
   <Button title="Get Contacts"onPress={getContacts} />
